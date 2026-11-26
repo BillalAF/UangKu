@@ -25,6 +25,8 @@ import {
   deleteTransaction,
   subscribeFinanceUpdates,
   formatRupiah,
+  formatThousands,
+  parseRawAmount,
 } from "../services/financeService";
 import {
   getCurrentUser,
@@ -135,7 +137,7 @@ export default function HomeScreen() {
   // Simpan data transaksi baru
   const handleSaveTransaction = async () => {
     const cleanTitle = formTitle.trim();
-    const cleanAmount = parseInt(formAmount.replace(/\D/g, ""), 10);
+    const cleanAmount = parseRawAmount(formAmount);
 
     if (!cleanTitle) {
       Alert.alert("Perhatian", "Silakan masukkan judul atau catatan transaksi.");
@@ -656,7 +658,7 @@ export default function HomeScreen() {
               placeholderTextColor="#9ca3af"
               keyboardType="numeric"
               value={formAmount}
-              onChangeText={setFormAmount}
+              onChangeText={(text) => setFormAmount(formatThousands(text))}
             />
 
             {/* Pilihan Kategori */}

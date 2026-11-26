@@ -1,4 +1,5 @@
 import Fontisto from "@expo/vector-icons/Fontisto";
+import { useHeaderHeight } from "@react-navigation/elements";
 import { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -40,6 +41,7 @@ const QUICK_SUGGESTIONS = [
 ];
 
 export default function AskScreen() {
+  const headerHeight = useHeaderHeight();
   const [messages, setMessages] = useState<ChatMessage[]>([
     INITIAL_BOT_MESSAGE,
   ]);
@@ -169,8 +171,8 @@ export default function AskScreen() {
     <SafeAreaView style={styles.container} edges={["left", "right"]}>
       <KeyboardAvoidingView
         style={styles.flexOne}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 25}
+        behavior="padding"
+        keyboardVerticalOffset={headerHeight}
       >
         <FlatList
           ref={flatListRef}
@@ -179,6 +181,7 @@ export default function AskScreen() {
           renderItem={renderMessageItem}
           contentContainerStyle={styles.chatListContent}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
           onContentSizeChange={() =>
             flatListRef.current?.scrollToEnd({ animated: true })
           }
@@ -199,6 +202,7 @@ export default function AskScreen() {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.suggestionsScrollContent}
           >
             {QUICK_SUGGESTIONS.map((suggestion, index) => (

@@ -457,3 +457,19 @@ export function formatRupiah(amount: number): string {
   }
   return "Rp " + rounded.toLocaleString("id-ID");
 }
+
+/**
+ * Format string atau number dengan pemisah ribuan titik (contoh: 5000 -> "5.000").
+ * Karakter non-digit dan awalan nol berlebih otomatis dibersihkan.
+ */
+export function formatThousands(value: string | number): string {
+  const digits = value.toString().replace(/\D/g, "").replace(/^0+(?=\d)/, "");
+  if (!digits) return "";
+  return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+/** Mengambil nilai integer murni dari string input berformat ribuan */
+export function parseRawAmount(value: string | number): number {
+  const digits = value.toString().replace(/\D/g, "");
+  return digits ? parseInt(digits, 10) : 0;
+}

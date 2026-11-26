@@ -16,7 +16,9 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   formatRupiah,
+  formatThousands,
   getTransactionById,
+  parseRawAmount,
   Transaction,
   TransactionType,
   updateTransaction,
@@ -63,7 +65,7 @@ export default function EditScreen() {
         if (data) {
           setTransaction(data);
           setTitle(data.title);
-          setAmount(data.amount.toString());
+          setAmount(formatThousands(data.amount));
           setType(data.type);
           setCategory(data.category);
           setWallet(data.wallet);
@@ -79,7 +81,7 @@ export default function EditScreen() {
     loadTransaction();
   }, [id]);
 
-  const parsedAmount = parseInt(amount.replace(/[^0-9]/g, ""), 10) || 0;
+  const parsedAmount = parseRawAmount(amount);
 
   const handleSave = async () => {
     if (!transaction) return;
@@ -243,7 +245,7 @@ export default function EditScreen() {
             <TextInput
               style={styles.textInput}
               value={amount}
-              onChangeText={setAmount}
+              onChangeText={(text) => setAmount(formatThousands(text))}
               keyboardType="numeric"
               placeholder="0"
               placeholderTextColor="#9ca3af"
